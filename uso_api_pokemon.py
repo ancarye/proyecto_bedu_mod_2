@@ -1,25 +1,30 @@
 import requests
 
+
 url = 'https://pokeapi.co/api/v2/pokemon/'
 
 response = requests.get(url)
 
-print(response)
+# Verificar si la solicitud fue exitosa
+if response.status_code == 200:
+    # Convertir la respuesta a JSON
+    data = response.json()
 
-data=response.json()
+    # Obtener el nombre de cada Pokémon
+    pokemon_list = data['results']
 
-print(data)
+    # Imprimir la información en serie
+    print("Lista de Pokémon:")
+    for i, pokemon_data in enumerate(pokemon_list, start=1):
+        pokemon_name = pokemon_data['name']
+        print(f"{i}. {pokemon_name.capitalize()}")
+else:
+    print("Error al obtener la lista de Pokémon."/n)
 
-# Nombre de cada pokemon
+separados = ("=============================================================")
+print(separados)
 
 
-name = (data['results'])
-i = 0
-
-for names, value in name:
-    pokemon = (data['results'][i]['name'])
-    print(pokemon)
-    i=i+1
 
 import os
 import requests
@@ -46,6 +51,18 @@ if response.status_code == 200:
     # Obtener la URL de la imagen desde el JSON
     image_url = data['sprites']['front_default']
 
+    
+    # Realizar una solicitud para obtener la imagen
+    image_response = requests.get(image_url)
+
+    # Verificar si la solicitud fue exitosa
+if response.status_code == 200:
+    # Convertir la respuesta a JSON
+    data = response.json()
+
+    # Obtener la URL de la imagen desde el JSON
+    image_url = data['sprites']['front_default']
+
     # Realizar una solicitud para obtener la imagen
     image_response = requests.get(image_url)
 
@@ -61,8 +78,26 @@ if response.status_code == 200:
         file_path = os.path.join(project_temp_dir, f'{pokemon_name}_image.png')
         image.save(file_path, format='PNG')
 
-        print(f"La imagen de {pokemon_name.capitalize()} ha sido guardada en: {file_path}")
-    else:
-        print("No se pudo obtener la imagen del Pokémon.")
+    # Obtener la URL de la imagen desde el JSON
+    image_url = data['sprites']['front_default']
+
+    # Obtener el tipo del Pokémon
+    types = [t['type']['name'] for t in data['types']]
+
+   
+    # Mostrar el tipo del Pokémon
+    print(f"El Pokémon {pokemon_name.capitalize()} es de tipo(s): {', '.join(types)}")
+
+
+
+    # Guardar la imagen en formato PNG en la carpeta temporal del proyecto
+    file_path = os.path.join(project_temp_dir, f'{pokemon_name}_image.png')
+    print(f"La imagen de {pokemon_name.capitalize()} ha sido guardada en: {file_path}")
+
+    
+
 else:
     print("No se pudo obtener la información del Pokémon.")
+
+
+    
